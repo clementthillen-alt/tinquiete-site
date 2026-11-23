@@ -1,0 +1,684 @@
+/* T'inquiète : feuille de style unique. Pensée d'abord pour le téléphone.
+
+   Parti pris : clair, lisible, direct. WhatsApp d'abord, le téléphone ensuite.
+   - Deux polices : Bricolage Grotesque (titres), Inter (texte).
+   - Fond crème, encre presque noire, vert sapin pour la marque, orange pour l'action. Rien d'autre.
+   - Texte courant à 18 px (un peu moins sur un téléphone étroit : 17 px à 390 px de large, 16 px à 360), zones cliquables d'au moins 44 px.
+   - Un seul espace entre deux blocs : --bloc.
+   - Une phrase par ligne, et pas de retour à la ligne au milieu d'une phrase :
+     chaque phrase est un bloc (.phrase), les phrases sont courtes et les colonnes assez larges pour les contenir.
+     Sur téléphone, la taille du texte suit la largeur de l'écran : une phrase qui tient sur un grand téléphone tient aussi sur un petit.
+     La signature (56 caractères) est en deux morceaux : sur téléphone, « pour les indépendants » passe dessous, dans son étiquette.
+   - La pastille orange à coche est celle du logo : partout, elle veut dire « voilà ce que tu y gagnes ».
+   - Deux rayons (--rayon, --rayon-petit), une ombre (--ombre), un contour de champ (--bord).
+   - Les quatre écrans de démonstration ont exactement la même taille et la même structure :
+     une barre en haut, le contenu, l'action tout en bas. */
+
+@font-face { font-family: "Bricolage"; src: url("../fonts/bricolage.woff2") format("woff2"); font-weight: 200 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("../fonts/inter.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+
+:root {
+  --fond: #faf6ee;
+  --blanc: #fff;
+  --encre: #16201a;
+  --texte: #2b352f;
+  --doux: #56615a;
+  --vert: #1f4733;
+  --vert-pale: #e7eee3;
+  --orange: #ff5a1f;
+  --orange-vif: #ff7240;   /* au survol : plus clair, pour que le texte encre reste lisible */
+  --trait: #ddd6c7;
+  --clair: #e9efe6;        /* texte sur fond vert */
+
+  --titres: "Bricolage", "Inter", system-ui, sans-serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --t-petit: clamp(0.875rem, 4.1vw, 1rem);
+  --t-texte: clamp(0.9375rem, 4.4vw, 1.125rem);
+  --t-chapo: clamp(1rem, 4.9vw, 1.1875rem);
+  --t-h3: clamp(1.0625rem, 5.2vw, 1.3125rem);
+  --t-h2: clamp(1.5rem, 7.2vw, 1.75rem);
+  --t-h1: clamp(2rem, 9.2vw, 4.25rem);
+
+  --marge: 1.25rem;
+  --bloc: clamp(3.5rem, 7vw, 5.5rem);
+  --large: 72rem;
+  --rayon: 14px;        /* cartes, photos, blocs */
+  --rayon-petit: 10px;  /* champs, éléments dans un écran */
+  --bord: #8f8878;      /* contour des champs et des étiquettes cliquables */
+  --ombre: 0 12px 28px rgba(22, 32, 26, 0.14);
+}
+@media (min-width: 48rem) { :root { --marge: 2rem; --t-h2: clamp(1.75rem, 3.8vw, 2.75rem); } }
+@media (min-width: 62rem) { :root { --t-chapo: clamp(1.1875rem, 1.9vw, 1.3125rem); } }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 5.5rem; scroll-padding-bottom: 5.5rem; }
+body {
+  margin: 0;
+  background: var(--fond);
+  color: var(--texte);
+  font-family: var(--sans);
+  font-size: var(--t-texte);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  hyphens: manual;
+}
+h1, h2, h3, p, ol, ul, figure { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-underline-offset: 0.18em; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.insecable { white-space: nowrap; }
+/* Une phrase par ligne : chaque phrase est un bloc. Rien ne force un retour à la ligne à l'intérieur d'une phrase. */
+.phrase { display: block; }
+/* Si une phrase doit quand même passer à la ligne (petit écran), le navigateur évite de laisser un mot seul au bout. */
+p, li { text-wrap: pretty; }
+
+.passer { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--encre); color: var(--blanc); padding: 0.75rem 1rem; }
+.passer:focus { left: 0; }
+
+.conteneur { width: 100%; max-width: var(--large); margin-inline: auto; padding-inline: var(--marge); }
+
+h1, h2, h3 { font-family: var(--titres); color: var(--encre); text-wrap: balance; }
+h1 { font-size: var(--t-h1); font-weight: 800; line-height: 1.04; letter-spacing: -0.025em; }
+h2 { font-size: var(--t-h2); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; }
+h3 { font-size: var(--t-h3); font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+.surtitre { display: block; margin-bottom: 0.75rem; font-size: 0.9375rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--vert); }
+.chapo { font-size: var(--t-chapo); line-height: 1.45; color: var(--texte); }
+.chapo strong { font-weight: 700; color: var(--encre); }
+
+/* La pastille du logo : rond orange, coche encre. Elle marque ce qu'on y gagne. */
+.pastille { display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--orange); color: var(--encre); flex: none; }
+.pastille svg { width: 100%; height: 100%; stroke-width: 3.5; }
+
+/* ---------- Boutons ---------- */
+
+.bouton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+  min-height: 3.25rem; padding: 0.7rem 1.4rem;
+  border: 2px solid var(--orange); border-radius: 999px;
+  background: var(--orange); color: var(--encre);
+  font-family: var(--sans); font-size: 1.0625rem; font-weight: 700; line-height: 1.2; text-decoration: none; text-align: center; white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.bouton--second { background: transparent; border-color: var(--encre); color: var(--encre); }
+/* Le survol ne concerne que la souris : sur un écran tactile, un bouton ne reste pas « allumé » après le doigt. */
+@media (hover: hover) {
+  .bouton:hover { background: var(--orange-vif); border-color: var(--orange-vif); box-shadow: 0 6px 18px rgba(255, 90, 31, 0.32); transform: translateY(-1px); }
+  .bouton--second:hover { background: var(--encre); border-color: var(--encre); color: var(--blanc); box-shadow: 0 6px 18px rgba(22, 32, 26, 0.18); }
+}
+.bouton:active { transform: scale(0.97); }
+.bouton--petit { min-height: 2.75rem; padding: 0.4rem 1.1rem; font-size: 1rem; }
+.bouton--grand { min-height: 3.75rem; padding-inline: 1.75rem; font-size: 1.1875rem; }
+.bouton svg { width: 1.25rem; height: 1.25rem; flex: none; }
+/* Très petit téléphone (moins de 352 px de large) : un bouton passe sur deux lignes plutôt que de dépasser de l'écran. */
+@media (max-width: 21.99rem) { .bouton { white-space: normal; padding-inline: 1rem; } .bouton--grand { padding-inline: 1.1rem; font-size: 1.0625rem; } }
+.bouton--grand svg { width: 1.5rem; height: 1.5rem; }
+
+/* ---------- En-tête ---------- */
+
+.entete { position: sticky; top: 0; z-index: 50; background: rgba(250, 246, 238, 0.96); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--trait); transition: box-shadow 0.25s; }
+.entete.est-descendue { box-shadow: 0 6px 22px rgba(22, 32, 26, 0.08); }
+.entete__ligne { display: flex; align-items: center; gap: 0.75rem; min-height: 4rem; }
+/* Le logo : le nom dans la bulle de réponse, avec la pastille « c'est réglé ». Fichiers dans img/logo/. */
+.logo { display: inline-flex; align-items: center; min-height: 2.75rem; margin-right: auto; text-decoration: none; }
+.logo__image, .logo img { display: block; height: 3rem; width: auto; overflow: visible; }
+.logo__points { opacity: 0; }
+.logo__pastille, .logo__points circle { transform-box: fill-box; transform-origin: center; }
+.entete__nav, .entete__tel, .entete__contact { display: none; }
+
+/* Téléphone et tablette : un bouton Menu qui ouvre la liste des sections */
+.menu summary { list-style: none; cursor: pointer; }
+.menu summary::-webkit-details-marker { display: none; }
+.menu__panneau { position: absolute; inset: 100% 0 auto 0; display: grid; padding: 0.25rem var(--marge) 1rem; background: var(--fond); border-bottom: 1px solid var(--trait); box-shadow: var(--ombre); }
+.menu__panneau a { display: flex; align-items: center; min-height: 3.25rem; border-bottom: 1px solid var(--trait); font-family: var(--titres); font-size: 1.25rem; font-weight: 700; color: var(--encre); text-decoration: none; }
+.menu__panneau a:last-child { border-bottom: 0; }
+
+/* Ordinateur : les liens sur une ligne, jamais coupés */
+@media (min-width: 62rem) {
+  .menu { display: none; }
+  .entete__ligne { gap: 1.5rem; min-height: 4.5rem; }
+  .logo { margin-right: 0; }
+  .entete__nav { display: flex; gap: 0.25rem; margin-inline: auto; }
+  .entete__nav a { display: inline-flex; align-items: center; min-height: 2.75rem; padding-inline: 0.85rem; border-radius: 999px; font-size: 1rem; font-weight: 600; color: var(--encre); text-decoration: none; white-space: nowrap; transition: background-color 0.15s; }
+  .entete__nav a:hover, .entete__nav a[aria-current] { background: var(--vert-pale); }
+  .entete__contact { display: inline-flex; }
+}
+@media (min-width: 75rem) {
+  .entete__tel { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; font-weight: 700; color: var(--encre); text-decoration: none; white-space: nowrap; }
+  .entete__tel:hover { text-decoration: underline; }
+  .entete__tel svg { width: 1.125rem; height: 1.125rem; }
+}
+
+/* ---------- 1. Haut de page ---------- */
+
+.hero { padding-block: clamp(2rem, 5vw, 4rem) var(--bloc); }
+.hero__grille { display: grid; gap: 2rem; align-items: center; }
+.hero h1 em { display: block; font-style: normal; color: var(--vert); }
+/* La signature : ce qu'on fait, puis pour qui (dans une étiquette verte). */
+.hero__signature { margin-top: 1.25rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; font-family: var(--titres); font-size: clamp(1rem, 5vw, 1.3125rem); font-weight: 700; line-height: 1.25; color: var(--encre); }
+.hero__quoi, .hero__pour { white-space: nowrap; }
+.hero__pour { padding: 0.15rem 0.7rem; border-radius: 999px; background: var(--vert); color: var(--blanc); font-size: 0.85em; font-weight: 600; }
+.hero__promesse { margin-top: 0.75rem; }
+/* Ce qu'on y gagne, en trois mots, juste au-dessus des boutons. */
+.atouts { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+/* Sur téléphone, le haut de page va à l'essentiel : un seul bouton (l'appel reste sous le pouce, dans la barre du bas)
+   et pas d'étiquettes. Elles reviennent dès qu'il y a la place. */
+@media (max-width: 47.99rem) { .atouts, .hero__actions .bouton--second { display: none; } }
+.atouts li { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.9rem 0.3rem 0.35rem; border: 1px solid var(--trait); border-radius: 999px; background: var(--blanc); font-size: var(--t-petit); font-weight: 700; color: var(--encre); white-space: nowrap; }
+.hero__actions { margin-top: 1.5rem; display: grid; gap: 0.75rem; }
+.hero__note { margin-top: 0.9rem; font-size: var(--t-petit); font-weight: 500; color: var(--doux); }
+.hero__photo { position: relative; }
+.hero__photo img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; border-radius: var(--rayon); background: var(--vert-pale); }
+.fiche { position: absolute; display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.9rem 0.6rem 0.65rem; border-radius: 14px; background: var(--blanc); box-shadow: var(--ombre); color: var(--encre); line-height: 1.2; }
+.fiche .pastille { width: 1.9rem; height: 1.9rem; }
+.fiche b { display: block; font-size: 0.9375rem; }
+.fiche small { display: block; font-size: 0.8125rem; color: var(--doux); }
+.fiche--haut { top: 1rem; left: 0.75rem; }
+.fiche--bas { bottom: 1rem; right: 0.75rem; }
+@media (min-width: 30rem) { .hero__actions { display: flex; flex-wrap: wrap; } }
+@media (min-width: 62rem) {
+  .hero__grille { grid-template-columns: 23fr 17fr; gap: 3.5rem; }   /* des parts entières : sinon la photo ne prend pas toute sa colonne */
+  .hero__photo img { aspect-ratio: 4 / 5; }
+  .fiche--haut { top: 1.75rem; left: -1.5rem; }
+  .fiche--bas { bottom: 1.75rem; right: -1.25rem; }
+}
+/* Écran moyen (tablette couchée, petit portable) : la colonne de texte est un peu plus large, les boutons un peu plus serrés. */
+@media (min-width: 62rem) and (max-width: 74.99rem) {
+  .hero h1 { font-size: 3.25rem; }
+  .hero__grille { grid-template-columns: 3fr 2fr; gap: 2.5rem; }
+  .hero__signature { font-size: 1.1875rem; }
+  .atouts li { font-size: 0.9375rem; }
+  .hero__actions .bouton { padding-inline: 1.1rem; font-size: 1rem; }
+}
+
+/* ---------- 2. Notre métier : trois lignes qui se lisent d'un coup d'œil. La troisième, c'est nous. ---------- */
+
+.metier { padding-block: var(--bloc); border-block: 1px solid var(--trait); background: var(--blanc); }
+.metier__grille { display: grid; gap: clamp(1.75rem, 4vw, 2.75rem); }
+.metier__texte { margin-top: 1rem; font-size: var(--t-chapo); line-height: 1.45; }
+.appels { display: grid; gap: 0.75rem; }
+/* Chaque ligne : une question, puis la réponse en gras, à la ligne. */
+.appel { display: grid; grid-template-columns: 2.75rem 1fr; column-gap: 0.85rem; row-gap: 0.1rem; align-items: center; padding: 0.9rem 1rem; border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--fond); line-height: 1.3; }
+.appel__icone { grid-row: span 2; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%; background: var(--vert-pale); color: var(--vert); }
+.appel__icone svg { width: 1.5rem; height: 1.5rem; }
+img.appel__icone { border-radius: 0; background: none; }
+.appel__quoi { align-self: end; font-size: var(--t-petit); }
+@media (min-width: 30rem) {
+  .appel { grid-template-columns: 3.25rem 1fr; column-gap: 1rem; padding: 1rem 1.15rem; }
+  .appel__icone { width: 3.25rem; height: 3.25rem; }
+  .appel__icone svg { width: 1.625rem; height: 1.625rem; }
+  .appel__quoi { font-size: inherit; }
+}
+.appel b { align-self: start; font-family: var(--titres); font-size: var(--t-h3); font-weight: 700; line-height: 1.2; color: var(--encre); }
+.appel--nous { border-color: var(--vert); background: var(--vert); box-shadow: var(--ombre); color: var(--clair); }
+.appel--nous b { color: var(--blanc); }
+.appel--nous .surligne { background-image: linear-gradient(transparent 84%, var(--orange) 84%); }
+.metier__pour { margin-top: clamp(1.75rem, 4vw, 2.75rem); padding-top: 1.5rem; border-top: 1px solid var(--trait); display: grid; gap: 0.75rem; }
+@media (max-width: 47.99rem) { .metier__pour { display: none; } }   /* téléphone : la liste des métiers est déjà dans les exemples à essayer */
+.metier__titre, .besoins__titre { font: 700 1.125rem/1.3 var(--sans); letter-spacing: 0; color: var(--encre); }
+.puces { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.puces li { padding: 0.3rem 0.85rem; border: 1px solid var(--trait); border-radius: 999px; background: var(--fond); font-size: var(--t-petit); font-weight: 600; color: var(--encre); white-space: nowrap; }
+.puces .puces__autres { border-color: var(--vert); background: var(--vert); color: var(--blanc); }
+@media (min-width: 62rem) {
+  .metier__grille { grid-template-columns: 1fr 1fr; column-gap: 4rem; align-items: center; }
+  .appel { padding: 1.15rem 1.4rem; }
+  .metier__pour { grid-template-columns: auto 1fr; align-items: center; gap: 1.5rem; }
+}
+
+/* ---------- Sections ---------- */
+
+.section { padding-block: var(--bloc); }
+.section--blanche { background: var(--blanc); }
+.section--pale { background: var(--vert-pale); }
+.section--verte, .contact { background: var(--vert); color: var(--clair); }
+.section--verte :is(h2, h3), .contact h2 { color: var(--blanc); }
+.section--verte .surtitre, .contact .surtitre { color: #b9d3bf; }
+.section--verte .chapo { color: var(--clair); }
+.section--verte :focus-visible, .contact :focus-visible { outline-color: var(--blanc); }
+.section__tete { margin-bottom: clamp(1.75rem, 4vw, 2.75rem); }
+.section__tete .chapo { margin-top: 1rem; }
+
+/* ---------- 3. Ce qu'on fait : trois cartes, comme la signature (sites, applis, outils sur mesure) ---------- */
+
+.offre { display: grid; gap: 1rem; }
+.offre__carte { display: grid; grid-template-rows: auto 1fr auto; gap: 0.75rem; padding: 1.25rem; border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--blanc); transition: box-shadow 0.25s; }
+@media (hover: hover) { .offre__carte:hover { box-shadow: var(--ombre); } }
+.offre__tete { display: flex; align-items: center; gap: 0.85rem; }
+/* Les trois mêmes dessins reviennent plus bas, reliés entre eux : le site, l'appli, l'outil. */
+.offre__icone { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 12px; background: var(--vert); color: var(--blanc); flex: none; }
+.offre__icone svg { width: 1.5rem; height: 1.5rem; }
+/* En bas de chaque carte : ce qu'on y gagne. */
+.offre__gain { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.8rem 0.5rem 0.5rem; border-radius: var(--rayon-petit); background: var(--vert-pale); font-size: var(--t-petit); font-weight: 700; color: var(--encre); }
+/* Le lien entre les trois : la même main pour tout. */
+.offre__suite { display: grid; gap: 1.75rem; margin-top: 1rem; padding: 1.5rem 1.25rem; border-radius: var(--rayon); background: var(--vert); color: var(--clair); }
+.offre__suite h3 { margin-bottom: 0.4rem; color: var(--blanc); }
+/* Le lien en image : un cadre au nom de T'inquiète, et dedans les trois cases reliées par un trait orange. */
+.atelier { position: relative; justify-self: start; padding: 1.5rem 1rem 0.9rem; border: 1.5px dashed rgba(255, 255, 255, 0.45); border-radius: var(--rayon); }
+.atelier__nom { position: absolute; top: -0.875rem; left: 0.75rem; display: inline-flex; align-items: center; gap: 0.4rem; padding-inline: 0.5rem; background: var(--vert); font-family: var(--titres); font-size: 1rem; font-weight: 700; line-height: 1.75rem; color: var(--blanc); white-space: nowrap; }
+.atelier__nom img { width: 1.5rem; height: 1.5rem; }
+.atelier__chaine { display: flex; }
+.atelier__case { position: relative; display: grid; justify-items: center; gap: 0.35rem; width: 4rem; font-size: 0.9375rem; font-weight: 700; line-height: 1.2; color: var(--blanc); }
+.atelier__case + .atelier__case { margin-left: 1.5rem; }
+.atelier__case i { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 12px; background: var(--blanc); color: var(--vert); }
+.atelier__case svg { width: 1.5rem; height: 1.5rem; }
+/* Le trait va du bord d'une case au bord de la suivante. Un point y passe de temps en temps : ça communique. */
+.atelier__case + .atelier__case::before { content: ""; position: absolute; top: calc(1.5rem - 1.5px); left: -2rem; width: 2.5rem; height: 3px; border-radius: 3px; background: var(--orange); transform-origin: left center; }
+.atelier__case + .atelier__case::after { content: ""; position: absolute; top: calc(1.5rem - 4px); left: -2rem; width: 8px; height: 8px; border-radius: 50%; background: var(--blanc); opacity: 0; }
+.pas-nous { margin-top: 1.25rem; font-size: var(--t-petit); color: var(--doux); }
+@media (min-width: 30rem) { .offre__carte { padding: 1.5rem; } .offre__suite { padding: 1.5rem; } }
+@media (min-width: 48rem) {
+  .offre__suite { grid-template-columns: 1fr auto; align-items: center; column-gap: 2.5rem; padding: 1.75rem 2rem; }
+  .atelier { justify-self: end; padding-inline: 1.25rem; }
+  .atelier__case { width: 4.5rem; }
+  .atelier__case + .atelier__case { margin-left: 1.75rem; }
+  .atelier__case + .atelier__case::before { left: -2.5rem; width: 3.25rem; }
+  .atelier__case + .atelier__case::after { left: -2.5rem; }
+}
+@media (min-width: 62rem) {
+  .offre { grid-template-columns: repeat(3, 1fr); }
+  .offre__tete { flex-direction: column; align-items: flex-start; }
+}
+@media (min-width: 62rem) and (max-width: 74.99rem) { .offre { gap: 0.75rem; } .offre__carte { padding: 1.25rem; } }
+
+/* ---------- 4. Ce que ça te rapporte : trois gains, un avant / après à faire glisser, un calcul ---------- */
+
+.rapport { display: grid; gap: 2rem; }
+.rapport .chapo { margin-top: 1rem; }
+.gains { display: grid; gap: 1.25rem; margin-top: 1.75rem; }
+.gain { display: grid; grid-template-columns: 3rem 1fr; column-gap: 1rem; row-gap: 0.35rem; align-items: center; }
+.gain__pastille { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 50%; background: var(--orange); color: var(--encre); }
+.gain__pastille svg { width: 1.5rem; height: 1.5rem; }
+.gain p { grid-column: 1 / -1; }
+@media (min-width: 62rem) {
+  .rapport { grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .gain { align-items: start; }
+  .gain__pastille { grid-row: span 2; }
+  .gain h3 { padding-top: 0.55rem; }
+  .gain p { grid-column: 2; }
+}
+
+/* Avant / après : deux photos l'une sur l'autre. Le curseur (une réglette invisible posée sur toute l'image) découvre l'une ou l'autre. */
+.avant-apres { --pos: 50%; }
+.avant-apres__cadre { position: relative; aspect-ratio: 4 / 3; border-radius: var(--rayon); overflow: hidden; background: var(--encre); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28); }
+.avant-apres__cadre img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.avant-apres__avant { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.avant-apres__etiquette { position: absolute; top: 0.75rem; padding: 0.2rem 0.7rem; border-radius: 999px; background: rgba(22, 32, 26, 0.72); color: var(--blanc); font-size: 0.875rem; font-weight: 700; pointer-events: none; }
+.avant-apres__etiquette--avant { left: 0.75rem; }
+.avant-apres__etiquette--apres { right: 0.75rem; }
+.avant-apres__poignee { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 3px; margin-left: -1.5px; background: var(--blanc); pointer-events: none; }
+.avant-apres__poignee::after { content: ""; position: absolute; top: 50%; left: 50%; width: 2.75rem; height: 2.75rem; margin: -1.375rem 0 0 -1.375rem; border: 3px solid var(--blanc); border-radius: 50%; background: var(--orange) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316201a' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 7l-5 5 5 5M15 7l5 5-5 5'/%3E%3C/svg%3E") center / 62% no-repeat; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35); }
+.avant-apres__curseur { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; }
+.avant-apres__cadre:has(.avant-apres__curseur:focus-visible) { outline: 3px solid var(--blanc); outline-offset: 3px; }
+.avant-apres figcaption { margin-top: 0.6rem; font-size: var(--t-petit); color: #cfe0d2; }
+
+/* Le calcul : une carte claire sur le fond vert. Le visiteur règle ses heures, on compte. */
+.calcul { margin-top: clamp(2rem, 4vw, 3rem); display: grid; gap: 1.5rem; padding: clamp(1.25rem, 3vw, 2rem); border-radius: var(--rayon); background: var(--fond); color: var(--texte); }
+.section--verte .calcul h3 { color: var(--encre); }
+.section--verte .calcul :focus-visible { outline-color: var(--orange); }
+.calcul label { display: block; margin-top: 0.35rem; font-weight: 600; color: var(--encre); }
+.calcul__reglage { display: flex; align-items: center; gap: 1rem; margin-top: 0.35rem; }
+.calcul__reglage input { flex: 1; min-width: 0; height: 2.75rem; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; }
+.calcul__reglage input::-webkit-slider-runnable-track { height: 0.5rem; border-radius: 999px; background: linear-gradient(to right, var(--vert) var(--rempli, 14%), var(--trait) var(--rempli, 14%)); }
+.calcul__reglage input::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 1.75rem; height: 1.75rem; margin-top: -0.625rem; border: 3px solid var(--blanc); border-radius: 50%; background: var(--orange); box-shadow: 0 2px 8px rgba(22, 32, 26, 0.3); }
+.calcul__reglage input::-moz-range-track { height: 0.5rem; border-radius: 999px; background: var(--trait); }
+.calcul__reglage input::-moz-range-progress { height: 0.5rem; border-radius: 999px; background: var(--vert); }
+.calcul__reglage input::-moz-range-thumb { width: 1.375rem; height: 1.375rem; border: 3px solid var(--blanc); border-radius: 50%; background: var(--orange); box-shadow: 0 2px 8px rgba(22, 32, 26, 0.3); }
+.calcul__reglage output { flex: none; min-width: 3.75rem; font-family: var(--titres); font-size: 1.75rem; font-weight: 800; line-height: 1; color: var(--encre); text-align: right; white-space: nowrap; }
+.calcul__resultat .phrase { white-space: nowrap; }
+.calcul__resultat b { font-family: var(--titres); font-size: clamp(1.75rem, 3.4vw, 2.25rem); font-weight: 800; line-height: 1.15; color: var(--vert); }
+.calcul__resultat small { display: block; margin-top: 0.35rem; font-size: 0.875rem; color: var(--doux); }
+.calcul__suite { display: grid; gap: 0.6rem; justify-items: start; }
+.calcul__suite p { font-size: 0.9375rem; color: var(--doux); }
+/* Sans JavaScript, la réglette ne servirait à rien : on montre seulement l'exemple. */
+html:not(.js) .calcul__reglage { display: none; }
+/* Ordinateur : la question à gauche, la réponse à droite, et le bouton sur une ligne en dessous. */
+@media (min-width: 62rem) {
+  .calcul { grid-template-columns: 1fr auto; align-items: center; column-gap: 4rem; row-gap: 1.75rem; }
+  .calcul__suite { grid-column: 1 / -1; display: flex; align-items: center; gap: 1.5rem; padding-top: 1.75rem; border-top: 1px solid var(--trait); }
+}
+
+/* ---------- 5. Les problèmes : un échange de messages ---------- */
+
+.problemes { display: grid; gap: 2rem; }
+.problemes__photo { display: none; }
+.echanges { display: grid; gap: 1.75rem; overflow-x: clip; }
+.echange { display: grid; gap: 0.5rem; }
+.bulle { max-width: min(100%, 36rem); padding: 0.8rem 1rem; border-radius: 20px; }
+.bulle--toi { justify-self: start; background: var(--blanc); border: 1px solid var(--trait); border-bottom-left-radius: 5px; font-family: var(--sans); font-size: var(--t-texte); font-weight: 600; line-height: 1.35; letter-spacing: 0; color: var(--encre); }
+.bulle--nous { justify-self: end; background: var(--vert); border-bottom-right-radius: 5px; color: #f3f6f1; }
+.bulle--nous strong { color: var(--blanc); font-weight: 800; }
+/* La réponse se termine par ce qu'on y gagne. */
+.bulle__gain { display: flex; align-items: center; gap: 0.55rem; margin-top: 0.6rem; font-weight: 700; color: var(--blanc); }
+.bulle__gain .pastille { width: 1.5rem; height: 1.5rem; }
+.echange__lien { justify-self: end; display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; margin-top: -0.25rem; padding-left: 0.5rem; font-size: var(--t-petit); font-weight: 700; color: var(--encre); text-decoration: none; }
+.echange__lien span { text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--orange); text-underline-offset: 0.22em; }
+.echange__lien:hover span { text-decoration-color: var(--encre); }
+.echange__lien svg { width: 1.2rem; height: 1.2rem; flex: none; color: var(--vert); }
+.problemes__suite { margin-top: 2.5rem; display: grid; gap: 1rem; justify-items: start; }
+.problemes__suite p { font-family: var(--titres); font-size: 1.375rem; font-weight: 700; line-height: 1.25; color: var(--encre); }
+@media (min-width: 62rem) {
+  .problemes { grid-template-columns: 7fr 13fr; gap: 4rem; align-items: start; }
+  .problemes__tete { position: sticky; top: 6.5rem; }
+  .problemes__photo { display: block; margin-top: 2rem; }
+  .problemes__photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--rayon); background: var(--blanc); }
+  .bulle { padding: 0.85rem 1.15rem; }
+  .echanges { max-width: 34rem; }
+}
+/* Grand écran : les échanges sur deux colonnes. La conversation reste serrée et la page est moins longue. */
+@media (min-width: 75rem) {
+  .problemes { grid-template-columns: 3fr 7fr; gap: 3rem; }
+  .echanges { max-width: none; grid-template-columns: 1fr 1fr; gap: 2.25rem 2.5rem; }
+  .bulle { padding-inline: 1rem; }
+  .problemes__tete { position: static; }
+}
+
+/* ---------- 6. Exemples à essayer : quatre écrans, chacun avec deux lignes de légende ---------- */
+
+/* Choix du métier : les démonstrations s'adaptent */
+.choix { display: grid; gap: 0.6rem; margin-bottom: 2rem; }
+.choix__titre { font-weight: 700; color: var(--encre); }
+.choix__liste { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.choix__bouton, .raccourcis-texte button { min-height: 2.75rem; padding: 0.35rem 1.1rem; border: 2px solid var(--bord); border-radius: 999px; background: var(--blanc); font-size: var(--t-petit); font-weight: 600; color: var(--encre); cursor: pointer; transition: background-color 0.15s, border-color 0.15s, color 0.15s; }
+.choix__bouton:hover, .raccourcis-texte button:hover { border-color: var(--vert); }
+.choix__bouton[aria-pressed="true"], .raccourcis-texte button[aria-pressed="true"] { border-color: var(--vert); background: var(--vert); color: var(--blanc); }
+
+/* Une colonne par écran, de la largeur de l'écran : la légende s'aligne dessous. */
+.cartes { display: grid; grid-template-columns: 14.5rem; justify-content: center; gap: 2.5rem 1.5rem; }
+.carte { display: grid; gap: 1.1rem; align-content: start; }
+.carte__texte { display: grid; gap: 0.3rem; font-size: var(--t-petit); }
+/* Téléphone : les quatre écrans se suivent sur une rangée qu'on fait glisser du doigt. Le suivant dépasse : on voit qu'il y a une suite. */
+@media (max-width: 39.99rem) {
+  .cartes { display: flex; justify-content: flex-start; gap: 1rem; margin-inline: calc(-1 * var(--marge)); padding: 0.25rem var(--marge) 1.5rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--marge); overscroll-behavior-x: contain; scrollbar-width: none; }
+  .cartes::-webkit-scrollbar { display: none; }
+  .carte { flex: none; width: 14.5rem; scroll-snap-align: start; }
+}
+@media (min-width: 40rem) { .cartes { grid-template-columns: repeat(2, 14.5rem); justify-content: space-evenly; } }
+@media (min-width: 75rem) { .cartes { grid-template-columns: repeat(4, 14.5rem); justify-content: space-between; } }
+
+/* Les quatre écrans de démonstration : même taille, même structure. */
+.ecran { width: 14.5rem; height: 27rem; max-width: 100%; margin-inline: auto; border: 7px solid var(--encre); border-radius: 28px; background: var(--blanc); overflow: hidden; box-shadow: var(--ombre); font-size: 0.8125rem; line-height: 1.35; color: var(--encre); }
+.ecran__contenu { display: flex; flex-direction: column; gap: 0.55rem; height: 100%; padding: 0 0.8rem 0.9rem; }
+.ecran p { margin: 0; }
+.ecran small { font-size: 0.75rem; color: var(--doux); }
+/* en haut : la barre */
+.m-barre { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-height: 2.75rem; margin-inline: -0.8rem; padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--trait); font-family: var(--titres); font-size: 0.9375rem; flex: none; }
+.m-contact { display: inline-flex; align-items: center; gap: 0.4rem; }
+.m-contact img { width: 1.375rem; height: 1.375rem; flex: none; }
+.m-barre i { width: 1.1rem; height: 0.7rem; border-block: 2px solid var(--encre); background: linear-gradient(var(--encre), var(--encre)) center / 100% 2px no-repeat; }
+/* en bas : l'action */
+.m-bas { display: grid; gap: 0.4rem; margin-top: auto; flex: none; }
+.m-bouton { display: grid; place-items: center; width: 100%; min-height: 2.4rem; padding: 0 0.5rem; border: 1.5px solid var(--encre); border-radius: 999px; background: var(--blanc); font: 700 0.8125rem/1.2 var(--sans); color: var(--encre); cursor: pointer; transition: background-color 0.15s, border-color 0.15s, color 0.15s, transform 0.1s; }
+/* Dans les écrans, les boutons gardent leur taille de maquette, mais la zone qui réagit au doigt fait au moins 44 px. */
+.m-bouton, .m-qte button { position: relative; }
+.m-bouton::after { content: ""; position: absolute; inset: -3px 0; }
+.m-qte button::after { content: ""; position: absolute; inset: -6px; }
+.m-bouton:hover { background: var(--vert-pale); }
+.m-bouton:active { transform: scale(0.97); }
+.m-bouton:disabled { opacity: 0.45; cursor: default; }
+.m-bouton--plein { border-color: var(--orange); background: var(--orange); }
+.m-bouton--plein:hover { border-color: var(--orange-vif); background: var(--orange-vif); }
+.m-bouton.est-fait, .m-bouton.est-fait:hover { border-color: var(--vert); background: var(--vert); color: #fff; }
+.m-info { min-height: 2.1rem; font-size: 0.75rem; line-height: 1.35; color: var(--doux); text-align: center; }
+/* entre les deux : le contenu */
+.m-image { display: grid; align-items: end; flex: 1; min-height: 5rem; margin-inline: -0.8rem; margin-top: -0.55rem; padding: 0.7rem 0.8rem; background: linear-gradient(transparent 30%, rgba(22, 32, 26, 0.6)), linear-gradient(160deg, #b98a5e 0%, #7d5a3c 100%); color: #fff; font-family: var(--titres); font-size: 1rem; font-weight: 700; line-height: 1.2; }
+.m-ligne { padding-bottom: 0.45rem; border-bottom: 1px solid var(--trait); }
+/* La photo ajoutée par la demande « Ajoute une photo » : une vraie image, différente pour chaque métier. */
+.m-photo { position: relative; flex: none; border-radius: var(--rayon-petit); overflow: hidden; background: var(--vert-pale); }
+.m-photo img { width: 100%; height: 5.25rem; object-fit: cover; }
+.m-photo figcaption { position: absolute; inset: auto 0 0 0; padding: 1.2rem 0.5rem 0.35rem; background: linear-gradient(transparent, rgba(22, 32, 26, 0.82)); color: #fff; font-size: 0.75rem; font-weight: 600; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* L'étiquette « Nouveau » : la pastille orange du logo, dans le coin de la photo. */
+.m-photo b { position: absolute; top: 0.4rem; left: 0.4rem; padding: 0.1rem 0.45rem; border-radius: 999px; background: var(--orange); color: var(--encre); font-size: 0.6875rem; font-weight: 700; line-height: 1.3; }
+.m-champ { display: grid; gap: 0.1rem; padding: 0.45rem 0.6rem; border: 1px solid var(--trait); border-radius: var(--rayon-petit); font-weight: 600; }
+.m-lignes { display: grid; }
+.m-article { display: grid; grid-template-columns: 1fr auto; gap: 0.15rem 0.5rem; align-items: center; padding-block: 0.4rem; border-bottom: 1px solid var(--trait); }
+.m-article__nom { grid-column: 1 / -1; font-weight: 600; }
+.m-article b { white-space: nowrap; }
+.m-qte { display: inline-flex; align-items: center; gap: 0.35rem; }
+.m-qte button { width: 2rem; height: 2rem; border: 1.5px solid var(--bord); border-radius: 50%; background: var(--blanc); font: 700 1rem/1 var(--sans); color: var(--encre); cursor: pointer; }
+.m-qte button:hover { border-color: var(--vert); }
+.m-qte output { min-width: 1.1rem; text-align: center; font-weight: 700; }
+.m-total { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.9375rem; font-weight: 700; }
+.m-total b { white-space: nowrap; }
+.m-statut { display: flex; align-items: center; gap: 0.4rem; align-self: flex-start; padding: 0.25rem 0.65rem 0.25rem 0.5rem; border-radius: 999px; background: var(--vert-pale); font-weight: 700; color: var(--vert); }
+.m-statut svg { width: 0.9rem; height: 0.9rem; }
+.m-montant { font-family: var(--titres); font-size: 1.75rem; font-weight: 800; line-height: 1.1; }
+.m-montant small { display: block; margin-top: 0.15rem; font-family: var(--sans); font-weight: 400; }
+.m-qr { display: flex; align-items: center; gap: 0.7rem; padding: 0.5rem; border: 1px solid var(--trait); border-radius: var(--rayon-petit); font-weight: 700; }
+.m-qr svg { width: 4.75rem; height: 4.75rem; flex: none; }
+.m-fil { display: grid; gap: 0.45rem; align-content: start; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; }
+.m-fil::-webkit-scrollbar { display: none; }
+.m-bulle { max-width: 88%; padding: 0.5rem 0.7rem; border-radius: 14px; }
+.m-bulle--toi { justify-self: start; background: #eeeae0; border-bottom-left-radius: 4px; }
+.m-bulle--nous { justify-self: end; background: var(--vert); color: #fff; border-bottom-right-radius: 4px; font-weight: 600; }
+.m-bulle a { color: inherit; font-weight: 700; }
+.m-frappe { display: inline-flex; gap: 0.2rem; align-items: center; }
+.m-frappe i { width: 0.35rem; height: 0.35rem; border-radius: 50%; background: currentColor; animation: frappe 1s infinite; }
+.m-frappe i:nth-child(2) { animation-delay: 0.15s; }
+.m-frappe i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes frappe { 0%, 60%, 100% { opacity: 0.3; transform: none; } 30% { opacity: 1; transform: translateY(-2px); } }
+.est-change { animation: change 1.4s ease; }
+@keyframes change { 0%, 35% { background-color: rgba(255, 90, 31, 0.35); } 100% { background-color: transparent; } }
+.m-bulle.est-nouvelle, .m-ligne.est-nouvelle { animation: apparait 0.3s ease; }
+@keyframes apparait { from { opacity: 0; transform: translateY(6px); } }
+/* La photo arrive en grandissant, entourée un instant d'orange pour qu'on la remarque. */
+.m-photo.est-nouvelle { animation: photo-arrive 1.6s ease; }
+@keyframes photo-arrive { 0% { opacity: 0; transform: scale(0.85); box-shadow: 0 0 0 0 rgba(255, 90, 31, 0); } 22% { opacity: 1; transform: none; box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.9); } 70% { box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.9); } 100% { box-shadow: 0 0 0 0 rgba(255, 90, 31, 0); } }
+
+/* ---------- 7. Du sur-mesure : à gauche la promesse, à droite d'autres exemples ---------- */
+
+.besoins { display: grid; gap: 2rem; }
+.besoins__tete .chapo { margin-top: 1rem; }
+.besoins__tete .bouton { margin-top: 1.5rem; }
+.besoins__exemples { display: grid; gap: 0.9rem; align-content: start; padding: 1.5rem; border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--blanc); }
+@media (max-width: 47.99rem) { .besoins__exemples { display: none; } }   /* téléphone : le titre et le bouton suffisent */
+@media (min-width: 62rem) { .besoins { grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; } }
+
+/* ---------- 8. Comment ça se passe ---------- */
+
+.etapes { display: grid; gap: 1.5rem; }
+.etape { display: grid; grid-template-columns: 3rem 1fr; column-gap: 1rem; row-gap: 0.35rem; align-items: center; }
+.etape__numero { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 50%; background: var(--vert); color: var(--blanc); font-family: var(--titres); font-size: 1.375rem; font-weight: 800; }
+.etape p { grid-column: 1 / -1; }
+@media (min-width: 48rem) {
+  .etape { align-items: start; }
+  .etape__numero { grid-row: span 2; }
+  .etape h3 { padding-top: 0.55rem; }
+  .etape p { grid-column: 2; }
+}
+@media (min-width: 75rem) {
+  .etapes { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .etape { grid-template-columns: 1fr; row-gap: 0.75rem; }
+  .etape__numero { grid-row: auto; }
+  .etape h3 { padding-top: 0.25rem; }
+  .etape p { grid-column: 1; }
+}
+
+/* ---------- 9. Questions fréquentes ---------- */
+
+.questions__liste { display: grid; gap: 0.75rem; max-width: 46rem; }
+.question { border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--blanc); }
+.question summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.5rem; padding: 0.9rem 1.1rem; font-family: var(--titres); font-size: clamp(1.0625rem, 4.7vw, 1.1875rem); font-weight: 700; line-height: 1.25; color: var(--encre); cursor: pointer; list-style: none; }
+.question summary::-webkit-details-marker { display: none; }
+.question summary::after { content: "+"; flex: none; font-family: var(--sans); font-size: 1.5rem; font-weight: 500; line-height: 1; color: var(--vert); }
+.question[open] summary::after { content: "\2212"; }
+.question summary:focus-visible { outline-offset: -3px; border-radius: var(--rayon); }
+.question p { padding: 0 1.1rem 1.15rem; }
+.question a { font-weight: 700; white-space: nowrap; }
+
+/* ---------- Réalisations (masquée tant qu'il n'y a pas de projets : retire l'attribut hidden) ---------- */
+
+.realisations { display: grid; gap: 1rem; }
+.realisation__cadre { display: grid; place-items: center; aspect-ratio: 4 / 3; border: 2px dashed var(--trait); border-radius: var(--rayon); color: var(--doux); font-weight: 600; overflow: hidden; }
+.realisation__cadre img { width: 100%; height: 100%; object-fit: cover; }
+.realisation figcaption { margin-top: 0.75rem; }
+.realisation figcaption strong { display: block; font-family: var(--titres); font-size: var(--t-h3); color: var(--encre); }
+@media (min-width: 48rem) { .realisations { grid-template-columns: repeat(3, 1fr); } }
+
+/* ---------- 10. Chez nous ---------- */
+
+.zone { display: grid; gap: 2rem; align-items: center; }
+.zone .chapo { margin-top: 1rem; }
+.zone .puces { margin-top: 1.5rem; }
+.zone__photo img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--rayon); background: var(--vert-pale); }
+@media (min-width: 62rem) { .zone { grid-template-columns: 1fr 1fr; gap: 3.5rem; } }
+
+/* ---------- 11. Contact ---------- */
+
+.contact { padding-block: var(--bloc); }
+.contact__grille { display: grid; gap: 2rem; }
+.contact__intro { margin-top: 1rem; font-size: var(--t-chapo); line-height: 1.45; }
+.contact__actions { margin-top: 1.75rem; display: grid; gap: 0.75rem; justify-items: start; }
+.contact__tel { display: inline-flex; align-items: center; gap: 0.75rem; min-height: 3rem; font-family: var(--titres); font-size: clamp(1.375rem, 5vw, 1.75rem); font-weight: 700; color: var(--blanc); text-decoration: none; white-space: nowrap; }
+.contact__tel:hover { text-decoration: underline; }
+.contact__tel svg { width: 1.5rem; height: 1.5rem; flex: none; }
+.contact__note { margin-top: 0.75rem; font-size: var(--t-petit); color: #cfe0d2; }
+.contact__plus { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.22); display: grid; gap: 1rem; justify-items: start; }
+/* Le QR code sert à passer de l'ordinateur au GSM : on ne le montre que sur grand écran. */
+.contact__qr { display: none; }
+.contact__carnet { display: inline-flex; align-items: center; gap: 0.6rem; min-height: 2.75rem; font-weight: 600; color: var(--blanc); }
+.contact__carnet svg { width: 1.25rem; height: 1.25rem; flex: none; }
+.formulaire { display: grid; gap: 1.1rem; padding: clamp(1.25rem, 4vw, 2rem); border-radius: var(--rayon); background: var(--fond); color: var(--texte); }
+.formulaire :focus-visible { outline-color: var(--orange); }
+.formulaire__titre { font-size: var(--t-h3); }
+.champ { display: grid; gap: 0.35rem; }
+.champ label { font-weight: 700; color: var(--encre); }
+.champ input, .champ textarea {
+  width: 100%; min-height: 3.25rem; padding: 0.7rem 0.9rem;
+  border: 2px solid var(--bord); border-radius: var(--rayon-petit);
+  background: var(--blanc); color: var(--encre);
+  font: 400 max(1rem, var(--t-texte))/1.4 var(--sans);   /* jamais sous 16 px : sinon l'iPhone zoome dans le champ */
+  appearance: none;
+}
+.champ textarea { min-height: 8rem; resize: vertical; }
+.raccourcis-texte { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.25rem; }
+.champ input::placeholder, .champ textarea::placeholder { color: #6d766f; opacity: 1; }
+.champ input:focus-visible, .champ textarea:focus-visible { outline: 0; border-color: var(--vert); box-shadow: 0 0 0 3px rgba(31, 71, 51, 0.25); }
+.champ [aria-invalid="true"] { border-color: #b3261e; }
+.formulaire .bouton { width: 100%; }
+.formulaire__retour { font-size: var(--t-petit); font-weight: 600; color: var(--encre); }
+.formulaire__retour a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.formulaire__retour:empty { display: none; }
+.formulaire__note { font-size: 0.9375rem; color: var(--doux); }
+.formulaire__note a { display: inline-block; padding-block: 0.75rem; }
+@media (min-width: 62rem) {
+  .contact__grille { grid-template-columns: 23fr 17fr; gap: 3rem; align-items: start; }
+  .contact__qr { display: flex; align-items: center; gap: 1.25rem; }
+  .contact__qr svg { width: 7rem; height: 7rem; flex: none; border-radius: var(--rayon-petit); }
+}
+
+/* ---------- Pied de page : fin et discret. La marque et le contact sur une ligne, le légal en petit dessous. ---------- */
+
+.pied { padding-block: 1.5rem 6rem; border-top: 1px solid var(--trait); font-size: 0.8125rem; line-height: 1.5; color: var(--doux); }
+.pied--court { padding-bottom: 1.5rem; }
+.pied__haut { display: grid; gap: 0.35rem; align-items: center; }
+.pied .logo { min-height: 2.75rem; margin: 0; justify-self: start; }   /* le logo est petit, mais la zone cliquable fait 44 px de haut */
+.pied .logo img { height: 1.875rem; }
+/* La signature tient sur une ligne, même sur un téléphone : sa taille suit la largeur de l'écran. */
+.pied__signature { font-size: clamp(0.75rem, 3.3vw, 0.875rem); color: var(--texte); white-space: nowrap; }
+@media (max-width: 21.99rem) { .pied__signature { white-space: normal; } }   /* très petit téléphone : elle passe sur deux lignes plutôt que de dépasser */
+.pied__liens { display: flex; flex-wrap: wrap; gap: 0 1.5rem; }
+.pied__lien { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 2.75rem; font-size: 0.875rem; font-weight: 600; color: var(--encre); text-decoration: none; white-space: nowrap; }
+.pied__lien:hover { text-decoration: underline; }
+.pied__lien svg { width: 1rem; height: 1rem; flex: none; color: var(--vert); }
+.pied__bas { margin-top: 0.5rem; padding-top: 0.75rem; border-top: 1px solid var(--trait); display: grid; gap: 0.15rem; align-items: center; }
+.pied__infos { display: grid; gap: 0.1rem; }
+.pied__infos li { white-space: nowrap; }
+.pied__liens--legal .pied__lien { font-size: 0.8125rem; font-weight: 500; color: var(--doux); }
+@media (min-width: 62rem) {
+  .pied { padding-bottom: 1.5rem; }
+  .pied__haut { grid-template-columns: auto 1fr auto; gap: 1.25rem; }
+  .pied__signature { padding-left: 1.25rem; border-left: 1px solid var(--trait); }
+  .pied__bas { grid-template-columns: 1fr auto; gap: 1.5rem; align-items: start; }
+}
+/* Grand écran : les trois informations légales sur une seule ligne, séparées par un point médian. */
+@media (min-width: 75rem) {
+  .pied__bas { align-items: center; }
+  .pied__infos { display: flex; gap: 0 0.75rem; }
+  .pied__infos li + li::before { content: "·"; margin-right: 0.75rem; }
+}
+
+/* ---------- Barre fixe en bas, sur téléphone : appeler ou écrire sur WhatsApp ---------- */
+
+.raccourcis { position: fixed; inset: auto 0 0 0; z-index: 60; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; padding: 0.5rem var(--marge) calc(0.5rem + env(safe-area-inset-bottom)); background: var(--fond); border-top: 1px solid var(--trait); }   /* fond plein : le texte de la page ne se devine pas derrière les boutons */
+.raccourcis .bouton { padding-inline: 0.75rem; }
+body:has(.formulaire :focus) .raccourcis, body:has(.menu[open]) .raccourcis { display: none; }
+@media (min-width: 62rem) { .raccourcis { display: none; } }
+
+/* ---------- Pages de texte (mentions légales, confidentialité, page introuvable) ---------- */
+
+.page-texte { max-width: 46rem; padding-block: clamp(2.5rem, 6vw, 4rem) var(--bloc); overflow-wrap: break-word; }
+.page-texte h1 { font-size: var(--t-h2); margin-bottom: 1.5rem; }
+.page-texte h2 { font-size: clamp(1.1875rem, 5.6vw, 1.375rem); margin: 2.25rem 0 0.6rem; }
+.page-texte p + p, .page-texte ul + p { margin-top: 0.75rem; }
+.page-texte ul { list-style: disc; padding-left: 1.25rem; display: grid; gap: 0.35rem; }
+.page-texte .bouton { margin-top: 1.75rem; }
+/* Un lien seul sur sa ligne : sa zone cliquable fait 44 px de haut. */
+.page-texte .lien-seul { display: inline-block; padding-block: 0.7rem; }
+
+/* ---------- Animations ---------- */
+
+/* Les blocs arrivent en douceur quand on les atteint (seulement si JavaScript est actif). */
+.js .revele { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; transition-delay: var(--delai, 0s); }
+.js .revele.est-visible { opacity: 1; transform: none; }
+.js .bulle--nous.revele { transform: translateX(22px) scale(0.96); transform-origin: right bottom; }
+.js .bulle--toi.revele { transform: translateX(-22px) scale(0.96); transform-origin: left bottom; }
+.js .bulle.revele.est-visible { transform: none; }
+
+/* Le logo de l'en-tête raconte la promesse : trois points (« je gère »), puis la coche (« c'est réglé »).
+   Il rejoue quand on le survole. Sans JavaScript ou si la personne a demandé moins d'animations, la coche est simplement là. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .logo--anime .logo__points { animation: logo-points 1.6s ease both; }
+  .js .logo--anime .logo__points circle { animation: logo-point 0.9s ease-in-out 2; }
+  .js .logo--anime .logo__points circle:nth-child(2) { animation-delay: 0.15s; }
+  .js .logo--anime .logo__points circle:nth-child(3) { animation-delay: 0.3s; }
+  .js .logo--anime .logo__coche { stroke-dasharray: 100; animation: logo-coche 0.4s 1.5s cubic-bezier(0.5, 0, 0.3, 1) both; }
+  .js .logo--anime .logo__pastille { animation: logo-bosse 0.5s 1.75s ease both; }
+}
+@keyframes logo-points { 0% { opacity: 0; } 12%, 86% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes logo-point { 0%, 60%, 100% { transform: none; opacity: 0.45; } 30% { transform: translateY(-40%); opacity: 1; } }
+@keyframes logo-coche { 0% { stroke-dashoffset: 100; opacity: 0; } 1% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 1; } }
+@keyframes logo-bosse { 0%, 100% { transform: none; } 40% { transform: scale(1.14); } }
+
+/* Le lien site / appli / outil : les deux traits orange se tirent quand le bloc arrive, puis un point y circule. */
+.js .revele .atelier__case + .atelier__case::before { transform: scaleX(0); transition: transform 0.5s 0.5s ease; }
+.js .revele .atelier__case:last-child::before { transition-delay: 0.9s; }
+.js .revele.est-visible .atelier__case + .atelier__case::before { transform: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .est-visible .atelier__case + .atelier__case::after { animation: passe 3.2s 1.6s ease-in-out infinite; }
+  .js .est-visible .atelier__case:last-child::after { animation-delay: 2.4s; }
+}
+@keyframes passe { 0% { opacity: 0; transform: none; } 8% { opacity: 1; } 34% { opacity: 1; transform: translateX(2rem); } 42%, 100% { opacity: 0; transform: translateX(2rem); } }
+
+/* Le nom se surligne à l'arrivée. Dans un bloc qui arrive en douceur, il se surligne quand le bloc est là. */
+.surligne { background: linear-gradient(transparent 68%, rgba(255, 90, 31, 0.32) 68%) no-repeat; background-size: 100% 100%; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.js .surligne { animation: surligne 0.9s 0.35s ease both; }
+@keyframes surligne { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
+.js .revele .surligne { animation: none; background-size: 0% 100%; transition: background-size 0.8s 0.75s ease; }
+.js .revele.est-visible .surligne { background-size: 100% 100%; }
+
+/* Les deux fiches sur la photo arrivent l'une après l'autre, puis flottent doucement. */
+.js .fiche { animation: fiche 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) both, flotte 6s ease-in-out 1.5s infinite; }
+.js .fiche--haut { animation-delay: 0.7s, 1.5s; }
+.js .fiche--bas { animation-delay: 1.15s, 2.4s; }
+@keyframes fiche { from { opacity: 0; transform: translateY(14px) scale(0.9); } }
+@keyframes flotte { 0%, 100% { transform: none; } 50% { transform: translateY(-5px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .revele { opacity: 1; transform: none; }
+  .js .surligne, .js .fiche, .m-frappe i, .est-change, .est-nouvelle { animation: none; }
+  .js .revele .surligne { background-size: 100% 100%; }
+  .js .revele .atelier__case + .atelier__case::before { transform: none; }
+  html { scroll-behavior: auto; }
+  * { transition-duration: 0.01ms !important; }
+}
+
+@media print {
+  .entete, .raccourcis, .formulaire, .avant-apres, .calcul__reglage { display: none; }
+  body { background: #fff; }
+  .section--verte, .contact { background: #fff; color: #000; }
+  .section--verte :is(h2, h3), .contact h2, .contact__tel, .contact__carnet { color: #000; }
+}
